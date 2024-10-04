@@ -21,7 +21,7 @@ import {Live2DCubismFramework as cubismmotion} from '@framework/motion/cubismmot
 import {Live2DCubismFramework as cubismmotionqueuemanager} from '@framework/motion/cubismmotionqueuemanager';
 import {Live2DCubismFramework as csmstring} from '@framework/type/csmstring';
 import {Live2DCubismFramework as csmrect} from '@framework/type/csmrectf';
-import {CubismLogInfo} from '@framework/utils/cubismdebug';
+import {CubismLogInfo,CubismLogError} from '@framework/utils/cubismdebug';
 import csmRect = csmrect.csmRect;
 import csmString = csmstring.csmString;
 import InvalidMotionQueueEntryHandleValue = cubismmotionqueuemanager.InvalidMotionQueueEntryHandleValue;
@@ -534,93 +534,98 @@ export class LAppModel extends CubismUserModel {
         this._model.update();
     }
 
-    /**
-     * Start playing the motion specified by the argument
-     * @param group Motion group name
-     * @param no Number in group
-     * @param priority 優先度
-     * @param onFinishedMotionHandler Callback function called at the end of motion playback
-     * @return Returns the identification number of the motion that started
-     * It is used in the argument of isFinished() that determines whether the individual motion has finished.
-     * If you can not start [-1]
-     */
-    public startMotion(
-        group: string,
-        no: number,
-        priority: number,
-        onFinishedMotionHandler?: FinishedMotionCallback
-    ): CubismMotionQueueEntryHandle {
-        if (priority == LAppDefine.PriorityForce) {
-            this._motionManager.setReservePriority(priority);
-        } else if (!this._motionManager.reserveMotion(priority)) {
-            if (this._debugMode) {
-                LAppPal.printMessage('[Live2Dv4] FAIL start motion.');
-            }
-            return InvalidMotionQueueEntryHandleValue;
-        }
+  /**
+   * 引数で指定したモーションの再生を開始する
+   * @param group モーショングループ名
+   * @param no グループ内の番号
+   * @param priority 優先度
+   * @param onFinishedMotionHandler モーション再生終了時に呼び出されるコールバック関数
+   * @return 開始したモーションの識別番号を返す。個別のモーションが終了したか否かを判定するisFinished()の引数で使用する。開始できない時は[-1]
+   */
+  public startMotion(
+    group: string,
+    no: number,
+    priority: number,
+    onFinishedMotionHandler?: FinishedMotionCallback
+  ): CubismMotionQueueEntryHandle {
+    if (priority == LAppDefine.PriorityForce) {
+      this._motionManager.setReservePriority(priority);
+    } else if (!this._motionManager.reserveMotion(priority)) {
+      if (this._debugMode) {
+        LAppPal.printMessage("[APP]can't start motion.");
+      }
+      return InvalidMotionQueueEntryHandleValue;
+    }
 
-        const motionFileName = this._modelSetting.getMotionFileName(group, no);
-        const motionSoundFileName = this._modelSetting.getMotionSoundFileName(
+    const motionFileName = this._modelSetting.getMotionFileName(group, no);
+
+    // ex) idle_0
+    const name = `${group}_${no}`;
+    let motion: CubismMotion = this._motions.getValue(name) as CubismMotion;
+    let autoDelete = false;
+
+    if (motion == null) {
+      fetch(`${this._modelHomeDir}${motionFileName}`)
+        .then(response => {
+          if (response.ok) {
+            return response.arrayBuffer();
+          } else if (response.status >= 400) {
+            CubismLogError(
+              `Failed to load file ${this._modelHomeDir}${motionFileName}`
+            );
+            return new ArrayBuffer(0);
+          }
+        })
+        .then(arrayBuffer => {
+          motion = this.loadMotion(
+            arrayBuffer,
+            arrayBuffer.byteLength,
+            null,
+            onFinishedMotionHandler
+          );
+
+          if (motion == null) {
+            return;
+          }
+
+          let fadeTime: number = this._modelSetting.getMotionFadeInTimeValue(
             group,
             no
-        );
-        const motionSoundDelay = this._modelSetting.getMotionSoundDelay(group, no);
-        this.playMotionSound(`${this._modelHomeDir}/${motionSoundFileName}`, motionSoundDelay);
-        // ex) idle_0
-        const name = `${group}_${no}`;
-        let motion: CubismMotion = this._motions.getValue(name) as CubismMotion;
-        let autoDelete = false;
+          );
 
-        if (motion == null) {
-            if (this._debugMode) {
-                LAppPal.printMessage(
-                    `[Live2Dv4] load motion: ${motionFileName} => [${name}]`
-                );
-            }
-            fetch(`${this._modelHomeDir}/${motionFileName}`)
-                .then(response => response.arrayBuffer())
-                .then(arrayBuffer => {
-                    motion = this.loadMotion(
-                        arrayBuffer,
-                        arrayBuffer.byteLength,
-                        null,
-                        onFinishedMotionHandler
-                    );
-                    let fadeTime: number = this._modelSetting.getMotionFadeInTimeValue(
-                        group,
-                        no
-                    );
+          if (fadeTime >= 0.0) {
+            motion.setFadeInTime(fadeTime);
+          }
 
-                    if (fadeTime >= 0.0) {
-                        motion.setFadeInTime(fadeTime);
-                    }
+          fadeTime = this._modelSetting.getMotionFadeOutTimeValue(group, no);
+          if (fadeTime >= 0.0) {
+            motion.setFadeOutTime(fadeTime);
+          }
 
-                    fadeTime = this._modelSetting.getMotionFadeOutTimeValue(group, no);
-                    if (fadeTime >= 0.0) {
-                        motion.setFadeOutTime(fadeTime);
-                    }
-                    motion.setEffectIds(this._eyeBlinkIds, this._lipSyncIds);
-                    autoDelete = false; // Delete from memory when finished
-                    this._motions.setValue(name, motion);
-                    return this._motionManager.startMotionPriority(
-                        motion,
-                        autoDelete,
-                        priority
-                    );
-                });
-        } else {
-            motion.setFinishedMotionHandler(onFinishedMotionHandler);
-        }
-
-        if (this._debugMode) {
-            LAppPal.printMessage(`[Live2Dv4] Motion Start: ${group}_${no}`);
-        }
-        return this._motionManager.startMotionPriority(
-            motion,
-            autoDelete,
-            priority
-        );
+          motion.setEffectIds(this._eyeBlinkIds, this._lipSyncIds);
+          autoDelete = true; // 終了時にメモリから削除
+        });
+    } else {
+      motion.setFinishedMotionHandler(onFinishedMotionHandler);
     }
+
+    //voice
+    const voice = this._modelSetting.getMotionSoundFileName(group, no);
+    if (voice.localeCompare('') != 0) {
+      let path = voice;
+      path = this._modelHomeDir + path;
+      this.playMotionSound(path,0);
+    }
+
+    if (this._debugMode) {
+      LAppPal.printMessage(`[APP]start motion: [${group}_${no}`);
+    }
+    return this._motionManager.startMotionPriority(
+      motion,
+      autoDelete,
+      priority
+    );
+  }
 
     /**
      * 播放动作音频
@@ -878,7 +883,7 @@ export class LAppModel extends CubismUserModel {
      * コンストラクタ
      */
     public constructor(debugMode) {
-        super(debugMode);
+        super();
 
         this._modelSetting = null;
         this._modelHomeDir = null;

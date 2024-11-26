@@ -146,20 +146,20 @@ export namespace Live2DCubismFramework {
     }
 
     /**
-     * Calculate X-axis values with current matrix
+     * X軸の値を現在の行列で計算
      *
-     * @param src X-axis value
-     * @return X-axis value calculated on the current matrix
+     * @param src X軸の値
+     * @return 現在の行列で計算されたX軸の値
      */
     public transformX(src: number): number {
       return this._tr[0] * src + this._tr[12];
     }
 
     /**
-     * Calculate y-axis values with current matrix
+     * Y軸の値を現在の行列で計算
      *
-     * @param src Y-axis value
-     * @return Y-axis value calculated on the current matrix
+     * @param src Y軸の値
+     * @return 現在の行列で計算されたY軸の値
      */
     public transformY(src: number): number {
       return this._tr[5] * src + this._tr[13];
@@ -303,6 +303,6 @@ export namespace Live2DCubismFramework {
       return cloneMatrix;
     }
 
-    protected _tr: Float32Array; // 4x4 matrix data
+    protected _tr: Float32Array; // 4x4行列データ
   }
 }

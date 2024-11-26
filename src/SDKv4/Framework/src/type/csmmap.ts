@@ -29,12 +29,12 @@ export namespace Live2DCubismFramework {
   }
 
   /**
-   * Map type
+   * マップ型
    */
   export class csmMap<_KeyT, _ValT> {
     /**
-     * Constructor with arguments
-     * @param size Size to secure at initialization
+     * 引数付きコンストラクタ
+     * @param size 初期化時点で確保するサイズ
      */
     public constructor(size?: number) {
       if (size != undefined) {

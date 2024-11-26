@@ -164,12 +164,12 @@ export namespace Live2DCubismFramework {
     }
 
     /**
-     * Load motion data
-     * @param buffer The buffer in which the motion3.json file is read
-     * @param size The size of the buffer
-     * @param name The name of the motion
-     * @param onFinishedMotionHandler Callback function called at the end of motion playback
-     * @return Motion class
+     * モーションデータを読み込む
+     * @param buffer motion3.jsonファイルが読み込まれているバッファ
+     * @param size バッファのサイズ
+     * @param name モーションの名前
+     * @param onFinishedMotionHandler モーション再生終了時に呼び出されるコールバック関数
+     * @return モーションクラス
      */
     public loadMotion = (
       buffer: ArrayBuffer,
@@ -349,7 +349,7 @@ export namespace Live2DCubismFramework {
     /**
      * コンストラクタ
      */
-    public constructor(debugMode) {
+    public constructor() {
       // 各変数初期化
       this._moc = null;
       this._model = null;
@@ -372,7 +372,7 @@ export namespace Live2DCubismFramework {
       this._accelerationX = 0.0;
       this._accelerationY = 0.0;
       this._accelerationZ = 0.0;
-      this._debugMode = debugMode;
+      this._debugMode = false;
       this._renderer = null;
 
       // モーションマネージャーを作成

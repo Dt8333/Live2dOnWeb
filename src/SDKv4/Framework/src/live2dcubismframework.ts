@@ -164,9 +164,9 @@ export namespace Live2DCubismFramework {
     }
 
     /**
-     *Releases all resources in Cubism Framework
-     *      However, it does not release externally secured resources.
-     *      It must be properly destroyed externally.
+     * Cubism Framework内の全てのリソースを解放します。
+     *      ただし、外部で確保されたリソースについては解放しません。
+     *      外部で適切に破棄する必要があります。
      */
     public static dispose(): void {
       CSM_ASSERT(s_isStarted);
@@ -175,10 +175,10 @@ export namespace Live2DCubismFramework {
         return;
       }
 
-      // --- Uninitialized release guard with s_isInitialized ---
-      // You must execute initialize() before dispose().
+      // --- s_isInitializedによる未初期化解放ガード ---
+      // dispose()するには先にinitialize()を実行する必要がある。
       if (!s_isInitialized) {
-        // false...When resources are not secured
+        // false...リソース未確保の場合
         CubismLogWarning('CubismFramework.dispose() skipped, not initialized.');
         return;
       }
@@ -188,7 +188,7 @@ export namespace Live2DCubismFramework {
       s_cubismIdManager.release();
       s_cubismIdManager = null;
 
-      // Release static resources (shader program, etc.) of the renderer
+      // レンダラの静的リソース（シェーダプログラム他）を解放する
       CubismRenderer.staticRelease();
 
       s_isInitialized = false;

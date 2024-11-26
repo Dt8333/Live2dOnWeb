@@ -56,7 +56,6 @@ export namespace Live2DCubismFramework {
   const Parameter = 'Parameter';
 
   const SoundPath = 'Sound';
-  const SoundDelay = 'SoundDelay';
   const FadeInTime = 'FadeInTime';
   const FadeOutTime = 'FadeOutTime';
 
@@ -405,24 +404,6 @@ export namespace Live2DCubismFramework {
     }
 
     /**
-     * 得到动作音频延迟
-     * @param groupName   动作组名
-     * @param index   动作索引
-     */
-    public getMotionSoundDelay(groupName: string, index: number): number {
-      if (!this.isExistMotionSoundDelay(groupName, index)) {
-        return 0;
-      }
-      
-      return this._jsonValue
-        .at(FrequestNode.FrequestNode_Motions)
-        .getValueByString(groupName)
-        .getValueByIndex(index)
-        .getValueByString(SoundDelay)
-        .toInt();
-    }
-
-    /**
      * モーション開始時のフェードイン処理時間を取得する
      * @param groupName モーショングループの名前
      * @param index 配列のインデックス値
@@ -477,10 +458,10 @@ export namespace Live2DCubismFramework {
     }
 
     /**
-     * Get layout information
-     * @param outLayoutMap Instance of csmMap class
-     * @return true Layout information exists
-     * @return false Layout information does not exist
+     * レイアウト情報を取得する
+     * @param outLayoutMap csmMapクラスのインスタンス
+     * @return true レイアウト情報が存在する
+     * @return false レイアウト情報が存在しない
      */
     public getLayoutMap(outLayoutMap: csmMap<string, number>): boolean {
       // 存在しない要素にアクセスするとエラーになるためValueがnullの場合はnullを代入する
@@ -745,21 +726,6 @@ export namespace Live2DCubismFramework {
         .getValueByString(groupName)
         .getValueByIndex(index)
         .getValueByString(SoundPath);
-      return !node.isNull() && !node.isError();
-    }
-
-    /**
-     * 判断是否存在 SoundDelay 键
-     * @param groupName 动作组名
-     * @param index 动作索引
-     * @private
-     */
-    private isExistMotionSoundDelay(groupName: string, index: number): boolean {
-      const node: Value = this._jsonValue
-        .at(FrequestNode.FrequestNode_Motions)
-        .getValueByString(groupName)
-        .getValueByIndex(index)
-        .getValueByString(SoundDelay);
       return !node.isNull() && !node.isError();
     }
 

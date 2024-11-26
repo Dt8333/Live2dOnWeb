@@ -158,9 +158,9 @@ export namespace Live2DCubismFramework {
     }
 
     /**
-     * Set position from layout information
+     * レイアウト情報から位置を設定
      *
-     * @param layout Layout information
+     * @param layout レイアウト情報
      */
     public setupFromLayout(layout: csmMap<string, number>): void {
       const keyWidth = 'width';

@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "",
   "main": "dist/live2d_bundle.js",
+  "packageManager": "yarn@4.1.1",
   "scripts": {
     "start": "webpack-dev-server --progress --devtool inline-source-map",
     "build": "webpack --mode development --devtool inline-source-map",

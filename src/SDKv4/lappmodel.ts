@@ -5,6 +5,8 @@
  * that can be found at https://www.live2d.com/eula/live2d-open-software-license-agreement_en.html.
  */
 
+import './frameworkpatch';
+
 import {Live2DCubismFramework as live2dcubismframework} from '@framework/live2dcubismframework';
 import {Live2DCubismFramework as cubismid} from '@framework/id/cubismid';
 import {Live2DCubismFramework as cubismusermodel} from '@framework/model/cubismusermodel';
@@ -878,7 +880,9 @@ export class LAppModel extends CubismUserModel {
      * コンストラクタ
      */
     public constructor(debugMode) {
-        super(debugMode);
+        super();
+
+        this._debugMode = debugMode;
 
         this._modelSetting = null;
         this._modelHomeDir = null;

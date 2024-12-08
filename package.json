@@ -35,5 +35,8 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/Dt8333/Live2dOnWeb.git"
+  },
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com/Dt8333"
   }
 }

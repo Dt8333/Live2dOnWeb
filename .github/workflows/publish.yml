@@ -18,6 +18,14 @@ jobs:
       - name: Enable Corepack
         run: corepack enable
       - run: yarn
+      - name: Authentication
+        run: |
+          echo npmAuthToken: "$NODE_AUTH_TOKEN" >> ./.yarnrc.yml
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - run: yarn workspaces focus --all --production
+      - run: |
+          yarn npm publish
       - run: yarn npm publish
         env:
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}

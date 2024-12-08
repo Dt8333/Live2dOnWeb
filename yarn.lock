@@ -5,6 +5,29 @@ __metadata:
   version: 8
   cacheKey: 10c0
 
+"@Dt8333/live2dweb@workspace:.":
+  version: 0.0.0-use.local
+  resolution: "@Dt8333/live2dweb@workspace:."
+  dependencies:
+    "@typescript-eslint/eslint-plugin": "npm:^2.18.0"
+    "@typescript-eslint/parser": "npm:^2.18.0"
+    compression-webpack-plugin: "npm:^7.1.2"
+    eslint: "npm:^6.8.0"
+    eslint-plugin-prettier: "npm:^3.1.2"
+    expose-loader: "npm:^1.0.0"
+    prettier: "npm:^1.19.1"
+    raw-loader: "npm:^4.0.1"
+    rimraf: "npm:^3.0.1"
+    serve: "npm:^11.3.0"
+    ts-loader: "npm:^6.2.1"
+    typescript: "npm:^3.7.5"
+    webpack: "npm:^5.22"
+    webpack-cli: "npm:^4.5"
+    webpack-dev-server: "npm:^3.11.2"
+    whatwg-fetch: "npm:^3.0.0"
+  languageName: unknown
+  linkType: soft
+
 "@babel/code-frame@npm:^7.0.0":
   version: 7.10.4
   resolution: "@babel/code-frame@npm:7.10.4"
@@ -3459,29 +3482,6 @@ __metadata:
   checksum: 10c0/e440df9de4233da0b389cd55bd61f0f6aaff766400bebbccd1231b81801f6dbc1d816c676ebe8d70566394b749fa624b1ed1c68070e9c94999f0bdecc64cb676
   languageName: node
   linkType: hard
-
-"live2dweb@workspace:.":
-  version: 0.0.0-use.local
-  resolution: "live2dweb@workspace:."
-  dependencies:
-    "@typescript-eslint/eslint-plugin": "npm:^2.18.0"
-    "@typescript-eslint/parser": "npm:^2.18.0"
-    compression-webpack-plugin: "npm:^7.1.2"
-    eslint: "npm:^6.8.0"
-    eslint-plugin-prettier: "npm:^3.1.2"
-    expose-loader: "npm:^1.0.0"
-    prettier: "npm:^1.19.1"
-    raw-loader: "npm:^4.0.1"
-    rimraf: "npm:^3.0.1"
-    serve: "npm:^11.3.0"
-    ts-loader: "npm:^6.2.1"
-    typescript: "npm:^3.7.5"
-    webpack: "npm:^5.22"
-    webpack-cli: "npm:^4.5"
-    webpack-dev-server: "npm:^3.11.2"
-    whatwg-fetch: "npm:^3.0.0"
-  languageName: unknown
-  linkType: soft
 
 "loader-runner@npm:^4.2.0":
   version: 4.2.0

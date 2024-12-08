@@ -1,6 +1,6 @@
 {
   "name": "@Dt8333/live2dweb",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "",
   "main": "dist/live2d_bundle.js",
   "packageManager": "yarn@4.1.1",

@@ -24,9 +24,9 @@ jobs:
 
       # Runs a set of commands using the runners shell
       - name: install dependencies
-        run: npm install
+        run: yarn
       - name: Build live2d_bundle.js
-        run: npm run build:prod
+        run: yarn run build:prod
       - name: Push to Github
         run: |
           git config --global user.name "Dt8333"
